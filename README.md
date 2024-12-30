@@ -2,6 +2,8 @@
 
 Bubbaloop is a serving platform for computer vision and AI Robotics.
 
+![compute_mean_std-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/22b35c6d-2a97-418c-a6f1-dbc131cf5bdb)
+
 ## Install dependencies
 
 ```
