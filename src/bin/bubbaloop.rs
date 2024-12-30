@@ -24,6 +24,7 @@ struct CLIArgs {
 #[argh(subcommand)]
 enum Commands {
     Compute(ComputeCommand),
+    Pipeline(PipelineCommand),
     Stats(StatsCommand),
 }
 
@@ -73,6 +74,45 @@ enum StatsMode {
 /// Print the whoami
 struct StatsWhoamiCommand {}
 
+#[derive(FromArgs)]
+#[argh(subcommand, name = "pipeline")]
+/// Manage pipelines
+struct PipelineCommand {
+    #[argh(subcommand)]
+    mode: PipelineMode,
+}
+
+#[derive(FromArgs)]
+#[argh(subcommand)]
+enum PipelineMode {
+    Start(PipelineStartCommand),
+    Stop(PipelineStopCommand),
+    List(PipelineListCommand),
+}
+
+#[derive(FromArgs)]
+#[argh(subcommand, name = "start")]
+/// Start a pipeline
+struct PipelineStartCommand {
+    #[argh(option, short = 'i')]
+    /// the pipeline id
+    id: String,
+}
+
+#[derive(FromArgs)]
+#[argh(subcommand, name = "stop")]
+/// Stop a pipeline
+struct PipelineStopCommand {
+    #[argh(option, short = 'i')]
+    /// the pipeline id
+    id: String,
+}
+
+#[derive(FromArgs)]
+#[argh(subcommand, name = "list")]
+/// List pipelines
+struct PipelineListCommand {}
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: CLIArgs = argh::from_env();
@@ -107,6 +147,42 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             StatsMode::Whoami(_whoami_command) => {
                 let response = client
                     .post(format!("http://{}/api/v0/stats/whoami", addr))
+                    .send()
+                    .await?;
+
+                let result = response.json::<serde_json::Value>().await?;
+                println!("Result: {:?}", result);
+            }
+        },
+        Commands::Pipeline(pipeline_command) => match pipeline_command.mode {
+            PipelineMode::Start(pipeline_start_command) => {
+                println!("Sending request to {} {} ", addr, pipeline_start_command.id);
+                let response = client
+                    .post(format!("http://{}/api/v0/pipeline/start", addr))
+                    .json(&bubbaloop::pipeline::PipelineStartRequest {
+                        pipeline_id: pipeline_start_command.id,
+                    })
+                    .send()
+                    .await?;
+
+                let result = response.json::<serde_json::Value>().await?;
+                println!("Result: {:?}", result);
+            }
+            PipelineMode::Stop(pipeline_stop_command) => {
+                let response = client
+                    .post(format!("http://{}/api/v0/pipeline/stop", addr))
+                    .json(&bubbaloop::pipeline::PipelineStopRequest {
+                        pipeline_id: pipeline_stop_command.id,
+                    })
+                    .send()
+                    .await?;
+
+                let result = response.json::<serde_json::Value>().await?;
+                println!("Result: {:?}", result);
+            }
+            PipelineMode::List(_pipeline_list_command) => {
+                let response = client
+                    .get(format!("http://{}/api/v0/pipeline/list", addr))
                     .send()
                     .await?;
 

@@ -14,14 +14,16 @@ pub struct MeanStdQuery {
     num_threads: Option<usize>,
 }
 
+/// The response of the compute mean and std request
 #[derive(Debug, Serialize)]
 pub enum ComputeResponse {
-    Success(ComputeMeanStdResponse),
+    Success(ComputeMeanStdResult),
     Error { error: String },
 }
 
+/// The result of the compute mean and std request
 #[derive(Debug, Serialize)]
-pub struct ComputeMeanStdResponse {
+pub struct ComputeMeanStdResult {
     mean: [f64; 3],
     std: [f64; 3],
 }
@@ -96,7 +98,7 @@ pub async fn compute_mean_std(query: Json<MeanStdQuery>) -> impl IntoResponse {
             let image = match kornia::io::functional::read_image_any(&image_path) {
                 Ok(image) => image,
                 Err(_e) => {
-                    log::error!("Failed to read image: {}", image_path.display());
+                    log::trace!("Failed to read image: {}", image_path.display());
                     pb.inc(1);
                     return;
                 }
@@ -139,7 +141,7 @@ pub async fn compute_mean_std(query: Json<MeanStdQuery>) -> impl IntoResponse {
     log::debug!("🔥Total std: {:?}", total_std);
     log::debug!("🔥Total mean: {:?}", total_mean);
 
-    Json(ComputeResponse::Success(ComputeMeanStdResponse {
+    Json(ComputeResponse::Success(ComputeMeanStdResult {
         mean: [
             total_mean[0] as f64,
             total_mean[1] as f64,
