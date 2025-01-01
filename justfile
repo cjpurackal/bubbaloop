@@ -28,11 +28,11 @@ whoami HOST PORT:
 compute-mean-std HOST PORT PATH:
     RUST_LOG=info cargo run --release --bin bubbaloop -- -h {{HOST}} -p {{PORT}} compute mean-std -i {{PATH}}
 
-pipeline-start ID:
-    RUST_LOG=info cargo run --release --bin bubbaloop pipeline start -i {{ID}}
+pipeline-start HOST PORT ID:
+    RUST_LOG=info cargo run --release --bin bubbaloop -- -h {{HOST}} -p {{PORT}} pipeline start -i {{ID}}
 
-pipeline-stop ID:
-    RUST_LOG=info cargo run --release --bin bubbaloop pipeline stop -i {{ID}}
+pipeline-stop HOST PORT ID:
+    RUST_LOG=info cargo run --release --bin bubbaloop -- -h {{HOST}} -p {{PORT}} pipeline stop -i {{ID}}
 
-pipeline-list:
-    RUST_LOG=info cargo run --release --bin bubbaloop pipeline list
+pipeline-list HOST PORT:
+    RUST_LOG=info cargo run --release --bin bubbaloop -- -h {{HOST}} -p {{PORT}} pipeline list
