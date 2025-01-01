@@ -30,7 +30,7 @@ enum Commands {
 
 #[derive(FromArgs)]
 #[argh(subcommand, name = "compute")]
-/// Compute mean and std of an image
+/// Execute local routines on the server
 struct ComputeCommand {
     #[argh(subcommand)]
     mode: ComputeMode,
@@ -57,7 +57,7 @@ struct ComputeMeanStdCommand {
 
 #[derive(FromArgs)]
 #[argh(subcommand, name = "stats")]
-/// Print the whoami
+/// Get stats about the server
 struct StatsCommand {
     #[argh(subcommand)]
     mode: StatsMode,
@@ -76,7 +76,7 @@ struct StatsWhoamiCommand {}
 
 #[derive(FromArgs)]
 #[argh(subcommand, name = "pipeline")]
-/// Manage pipelines
+/// Pipeline management commands
 struct PipelineCommand {
     #[argh(subcommand)]
     mode: PipelineMode,
