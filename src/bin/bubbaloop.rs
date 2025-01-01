@@ -146,7 +146,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Commands::Stats(stats_command) => match stats_command.mode {
             StatsMode::Whoami(_whoami_command) => {
                 let response = client
-                    .post(format!("http://{}/api/v0/stats/whoami", addr))
+                    .get(format!("http://{}/api/v0/stats/whoami", addr))
                     .send()
                     .await?;
 
