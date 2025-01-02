@@ -18,10 +18,19 @@
                 "res_cols": 640,
                 "fps": 30,
             }
+        ),
+        (
+            id: "rerun",
+            type: "crate::cu29_tasks::RerunViz",
+            config: {
+                "ip": "192.168.1.144",
+                "port": 9876,
+            }
         )
     ],
     cnx: [
         (src: "cam0", dst: "writer", msg: "crate::cu29_tasks::ImageRGBU8Msg"),
+        (src: "cam0", dst: "rerun", msg: "crate::cu29_tasks::ImageRGBU8Msg"),
     ]
     ,
     logging: (
