@@ -1,7 +1,9 @@
+use std::str::FromStr;
+
 use cu29::prelude::*;
 use kornia::io::stream::{
     video::{ImageFormat, VideoCodec, VideoWriter as KorniaVideoWriter},
-    CameraCapture, V4L2CameraConfig,
+    CameraCapture, RTSPCameraConfig, V4L2CameraConfig,
 };
 
 pub type ImageRGBU8 = kornia::image::Image<u8, 3>;
@@ -91,10 +93,14 @@ impl<'cl> CuSrcTask<'cl> for VideoCapture {
             )
         };
 
-        let cap = V4L2CameraConfig::new()
-            .with_camera_id(camera_id)
-            .with_fps(fps)
-            .with_size([res_cols as usize, res_rows as usize].into())
+        //let cap = V4L2CameraConfig::new()
+        //    .with_camera_id(camera_id)
+        //    .with_fps(fps)
+        //    .with_size([res_cols as usize, res_rows as usize].into())
+        //    .build()
+        //    .map_err(|e| CuError::new_with_cause("Failed to build camera", e))?;
+        let cap = RTSPCameraConfig::new()
+            .with_url("rtsp://tapo_entrance:123456789@192.168.1.141:554/stream2")
             .build()
             .map_err(|e| CuError::new_with_cause("Failed to build camera", e))?;
 
@@ -225,4 +231,58 @@ impl<'cl> CuSinkTask<'cl> for VideoWriter {
 
         Ok(())
     }
+}
+
+pub struct RerunViz {
+    rec: rerun::RecordingStream,
+}
+
+impl Freezable for RerunViz {}
+
+impl<'cl> CuSinkTask<'cl> for RerunViz {
+    type Input = input_msg!('cl, ImageRGBU8Msg);
+
+    fn new(config: Option<&ComponentConfig>) -> Result<Self, CuError>
+    where
+        Self: Sized,
+    {
+        const DEFAULT_IP: &str = "127.0.0.1";
+        const DEFAULT_PORT: u32 = 9876;
+        let (ip, port) = if let Some(config) = config {
+            let ip = config.get::<String>("ip").unwrap_or(DEFAULT_IP.to_string());
+            let port = config.get::<u32>("port").unwrap_or(DEFAULT_PORT);
+            (ip, port)
+        } else {
+            (DEFAULT_IP.to_string(), DEFAULT_PORT)
+        };
+        let addr = std::net::SocketAddr::from_str(format!("{}:{}", ip, port).as_str()).unwrap();
+        Ok(Self {
+            rec: rerun::RecordingStreamBuilder::new("kornia_app")
+                .connect_tcp_opts(addr, None)
+                .map_err(|e| CuError::new_with_cause("Failed to spawn rerun stream", e))?,
+        })
+    }
+
+    fn process(&mut self, _clock: &RobotClock, input: Self::Input) -> Result<(), CuError> {
+        let Some(ImageRGBU8Msg { image }) = input.payload() else {
+            return Ok(());
+        };
+
+        log_image_rgb(&self.rec, "webcam", image)?;
+
+        Ok(())
+    }
+}
+
+fn log_image_rgb(
+    rec: &rerun::RecordingStream,
+    name: &str,
+    img: &ImageRGBU8,
+) -> Result<(), CuError> {
+    rec.log(
+        name,
+        &rerun::Image::from_elements(img.as_slice(), img.size().into(), rerun::ColorModel::RGB),
+    )
+    .map_err(|e| CuError::new_with_cause("Failed to log image", e))?;
+    Ok(())
 }
