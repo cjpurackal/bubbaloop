@@ -4,13 +4,9 @@ use std::str::FromStr;
 use crate::cu29::msgs::{ImageRGBU8, ImageRGBU8Msg};
 use cu29::prelude::*;
 
-// default values
-const DEFAULT_IP: &str = "127.0.0.1";
-const DEFAULT_PORT: u32 = 9876;
-
 pub struct RerunLogger {
-    rec_viz: rerun::RecordingStream,
     rec_stats: rerun::RecordingStream,
+    rec_viz: Option<rerun::RecordingStream>,
 }
 
 impl Freezable for RerunLogger {}
@@ -24,22 +20,8 @@ impl<'cl> CuSinkTask<'cl> for RerunLogger {
     {
         let config = config.expect("config is required");
 
-        let (ip, port) = (
-            config.get::<String>("ip").unwrap_or(DEFAULT_IP.to_string()),
-            config.get::<u32>("port").unwrap_or(DEFAULT_PORT),
-        );
-
-        let path = config.get::<String>("path").expect("path is required");
-
-        let addr = SocketAddr::from_str(format!("{}:{}", ip, port).as_str())
-            .map_err(|e| CuError::new_with_cause("Failed to parse socket address", e))?;
-
-        // stream for remote visualization
-        let rec_viz = rerun::RecordingStreamBuilder::new("bubbaloop")
-            .connect_tcp_opts(addr, None)
-            .map_err(|e| CuError::new_with_cause("Failed to spawn rerun stream", e))?;
-
         // stream for local recording
+        let path = config.get::<String>("path").expect("path is required");
         let rec_path = {
             let timestamp = std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
@@ -52,6 +34,22 @@ impl<'cl> CuSinkTask<'cl> for RerunLogger {
             .save(rec_path)
             .map_err(|e| CuError::new_with_cause("Failed to spawn rerun stream", e))?;
 
+        // create the remote rerun server stream
+        let rec_viz = match (config.get::<String>("ip"), config.get::<u32>("port")) {
+            (Some(ip), Some(port)) => {
+                let addr = SocketAddr::from_str(&format!("{}:{}", ip, port))
+                    .map_err(|e| CuError::new_with_cause("Failed to parse socket address", e))?;
+
+                // stream for remote visualization
+                Some(
+                    rerun::RecordingStreamBuilder::new("bubbaloop")
+                        .connect_tcp_opts(addr, None)
+                        .map_err(|e| CuError::new_with_cause("Failed to spawn rerun stream", e))?,
+                )
+            }
+            _ => None,
+        };
+
         Ok(Self { rec_viz, rec_stats })
     }
 
@@ -60,8 +58,13 @@ impl<'cl> CuSinkTask<'cl> for RerunLogger {
             return Ok(());
         };
 
-        log_image_rgb(&self.rec_viz, "image", image)?;
+        // log the image to the local rerun server
         log_image_rgb(&self.rec_stats, "image", image)?;
+
+        // log the image to the remote rerun server if it is connected
+        if let Some(rec_viz) = &self.rec_viz {
+            log_image_rgb(rec_viz, "image", image)?;
+        }
 
         Ok(())
     }
