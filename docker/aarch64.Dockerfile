@@ -5,7 +5,6 @@ FROM ghcr.io/cross-rs/aarch64-unknown-linux-gnu:0.2.5
 RUN apt-get update && apt-get install --assume-yes \
     cmake \
     curl \
-    libglib2.0-dev \
     pkg-config \
     && \
     apt-get clean
@@ -21,3 +20,4 @@ RUN apt-get update && apt-get install --assume-yes \
     libudev-dev:arm64 \
     && \
     apt-get clean
+
