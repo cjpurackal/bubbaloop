@@ -1,11 +1,16 @@
-use axum::extract::State;
-use axum::response::{IntoResponse, Json};
+use ::cu29::{config::CuConfig, read_configuration};
+use axum::{
+    extract::State,
+    response::{IntoResponse, Json},
+};
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use std::collections::HashMap;
-use std::sync::atomic::AtomicBool;
-use std::sync::{Arc, Mutex};
+use std::{
+    collections::HashMap,
+    sync::atomic::AtomicBool,
+    sync::{Arc, Mutex},
+};
 
 use crate::cu29;
 
@@ -85,6 +90,9 @@ struct PipelineInfo {
 pub struct PipelineStartRequest {
     // the id of the pipeline to start
     pub pipeline_id: String,
+
+    // serialized ron string
+    pub ron_config: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -117,6 +125,9 @@ pub async fn start_pipeline(
         );
     }
 
+    // parse the ron config string
+    let copper_config = CuConfig::deserialize_ron(&request.ron_config);
+
     // check if the pipeline id is already in the store
     let pipeline_id = request.pipeline_id;
     let mut pipeline_store = store.0.lock().expect("Failed to lock pipeline store");
@@ -132,7 +143,7 @@ pub async fn start_pipeline(
     }
 
     // create the pipeline if it does not exist
-    let mut app = match cu29::app::CopperPipeline::new() {
+    let mut app = match cu29::app::CopperPipeline::new(copper_config) {
         Ok(app) => app,
         Err(e) => {
             log::error!("Failed to create pipeline: {}", e);
@@ -221,4 +232,21 @@ pub async fn list_pipelines(State(store): State<PipelineStore>) -> impl IntoResp
         })
         .collect::<Vec<_>>();
     Json(pipelines)
+}
+
+pub async fn get_config(State(_store): State<PipelineStore>) -> impl IntoResponse {
+    let copper_config = match read_configuration("bubbaloop.ron") {
+        Ok(config) => config,
+        Err(e) => {
+            log::error!("Failed to read configuration: {}", e);
+            return (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(json!({ "error": "Failed to read configuration" })),
+            );
+        }
+    };
+
+    let all_nodes = copper_config.get_all_nodes();
+
+    (StatusCode::OK, Json(json!(all_nodes)))
 }

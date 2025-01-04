@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use argh::FromArgs;
 use serde_json::json;
 
@@ -88,6 +90,7 @@ enum PipelineMode {
     Start(PipelineStartCommand),
     Stop(PipelineStopCommand),
     List(PipelineListCommand),
+    Config(PipelineConfigCommand),
 }
 
 #[derive(FromArgs)]
@@ -97,6 +100,10 @@ struct PipelineStartCommand {
     #[argh(option, short = 'i')]
     /// the pipeline id
     id: String,
+
+    #[argh(option, short = 'c')]
+    /// the ron config file path
+    ron_config: PathBuf,
 }
 
 #[derive(FromArgs)]
@@ -112,6 +119,11 @@ struct PipelineStopCommand {
 #[argh(subcommand, name = "list")]
 /// List pipelines
 struct PipelineListCommand {}
+
+#[derive(FromArgs)]
+#[argh(subcommand, name = "config")]
+/// Get the pipeline config
+struct PipelineConfigCommand {}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -157,10 +169,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Commands::Pipeline(pipeline_command) => match pipeline_command.mode {
             PipelineMode::Start(pipeline_start_command) => {
                 println!("Sending request to {} {} ", addr, pipeline_start_command.id);
+                // load the ron config file and serialize it to a string
+                let ron_config = cu29::read_configuration(
+                    pipeline_start_command
+                        .ron_config
+                        .to_str()
+                        .expect("Failed to convert path to string"),
+                )?;
+
                 let response = client
                     .post(format!("http://{}/api/v0/pipeline/start", addr))
                     .json(&bubbaloop::pipeline::PipelineStartRequest {
                         pipeline_id: pipeline_start_command.id,
+                        ron_config: ron_config.serialize_ron(),
                     })
                     .send()
                     .await?;
@@ -183,6 +204,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             PipelineMode::List(_pipeline_list_command) => {
                 let response = client
                     .get(format!("http://{}/api/v0/pipeline/list", addr))
+                    .send()
+                    .await?;
+
+                let result = response.json::<serde_json::Value>().await?;
+                println!("Result: {:?}", result);
+            }
+            PipelineMode::Config(_pipeline_config_command) => {
+                let response = client
+                    .get(format!("http://{}/api/v0/pipeline/config", addr))
                     .send()
                     .await?;
 
