@@ -14,6 +14,8 @@
             id: "cam0",
             type: "crate::cu29::tasks::RTSPCamera",
             config: {
+                // URL of the RTSP camera
+                // rtsp://<username>:<password>@<ip>:<port>/<stream>
                 "url": "rtsp://tapo_entrance:123456789@192.168.1.141:554/stream2",
             }
         ),
@@ -21,9 +23,12 @@
             id: "rerun",
             type: "crate::cu29::tasks::RerunLogger",
             config: {
-                "ip": "192.168.1.144",
-                "port": 9876,
+                // Path to the directory where the logs will be stored
                 "path": "/home/edgar/",
+                // IP address of the rerun server
+                "ip": "192.168.1.144",
+                // Port of the rerun server
+                "port": 9876,
             }
         )
     ],
