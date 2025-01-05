@@ -152,7 +152,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .await?;
 
                 let result = response.json::<serde_json::Value>().await?;
-                println!("Result: {:?}", result);
+                println!("Result: {}", serde_json::to_string_pretty(&result)?);
             }
         },
         Commands::Stats(stats_command) => match stats_command.mode {
@@ -163,7 +163,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .await?;
 
                 let result = response.json::<serde_json::Value>().await?;
-                println!("Result: {:?}", result);
+                println!("Result: {}", serde_json::to_string_pretty(&result)?);
             }
         },
         Commands::Pipeline(pipeline_command) => match pipeline_command.mode {
@@ -187,7 +187,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .await?;
 
                 let result = response.json::<serde_json::Value>().await?;
-                println!("Result: {:?}", result);
+                println!("Result: {}", serde_json::to_string_pretty(&result)?);
             }
             PipelineMode::Stop(pipeline_stop_command) => {
                 let response = client
@@ -199,7 +199,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .await?;
 
                 let result = response.json::<serde_json::Value>().await?;
-                println!("Result: {:?}", result);
+                println!("Result: {}", serde_json::to_string_pretty(&result)?);
             }
             PipelineMode::List(_pipeline_list_command) => {
                 let response = client
@@ -208,7 +208,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .await?;
 
                 let result = response.json::<serde_json::Value>().await?;
-                println!("Result: {:?}", result);
+                println!("Result: {}", serde_json::to_string_pretty(&result)?);
             }
             PipelineMode::Config(_pipeline_config_command) => {
                 let response = client
@@ -217,7 +217,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .await?;
 
                 let result = response.json::<serde_json::Value>().await?;
-                println!("Result: {:?}", result);
+                println!("Result: {}", serde_json::to_string_pretty(&result)?);
             }
         },
     }
