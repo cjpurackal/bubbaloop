@@ -24,12 +24,8 @@ impl<'cl> CuSrcTask<'cl> for V4L2Camera {
             let camera_id = config
                 .get::<u32>("camera_id")
                 .unwrap_or(Self::DEFAULT_CAMERA_ID);
-            let res_rows = config
-                .get::<u32>("res_rows")
-                .unwrap_or(Self::DEFAULT_RES_ROWS);
-            let res_cols = config
-                .get::<u32>("res_cols")
-                .unwrap_or(Self::DEFAULT_RES_COLS);
+            let res_rows = config.get::<u32>("rows").unwrap_or(Self::DEFAULT_RES_ROWS);
+            let res_cols = config.get::<u32>("cols").unwrap_or(Self::DEFAULT_RES_COLS);
             let fps = config.get::<u32>("fps").unwrap_or(Self::DEFAULT_FPS);
             (camera_id, res_rows, res_cols, fps)
         } else {
