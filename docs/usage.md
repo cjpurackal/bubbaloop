@@ -47,9 +47,9 @@ just whoami 0.0.0.0 3000
 Result: {
   "arch": "Arm64",
   "desktop_env": "Unknown",
-  "device_name": "nvidia-nano",
-  "distro": "Ubuntu 18.04.6 LTS",
-  "hostname": "nvidia-nano",
+  "device_name": "nvidia-desktop",
+  "distro": "Ubuntu 22.04.5 LTS",
+  "hostname": "nvidia-desktop",
   "platform": "Linux",
   "realname": "nvidia",
   "username": "nvidia"
@@ -72,136 +72,69 @@ just sysinfo 0.0.0.0 3000
 
 ```json
 Result: {
-  "available_memory": 47551553536,
+  "available_memory": 7011606528,
   "cpus": [
     {
-      "brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
-      "frequency": 1272,
+      "brand": "Cortex-A78AE",
+      "frequency": 1113,
       "name": "cpu0",
       "usage": 0.0
     },
     {
-      "brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
-      "frequency": 1630,
+      "brand": "Cortex-A78AE",
+      "frequency": 1113,
       "name": "cpu1",
       "usage": 0.0
     },
     {
-      "brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
-      "frequency": 1574,
+      "brand": "Cortex-A78AE",
+      "frequency": 1113,
       "name": "cpu2",
       "usage": 0.0
     },
     {
-      "brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
-      "frequency": 1320,
+      "brand": "Cortex-A78AE",
+      "frequency": 1113,
       "name": "cpu3",
       "usage": 0.0
     },
     {
-      "brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
-      "frequency": 1381,
+      "brand": "Cortex-A78AE",
+      "frequency": 729,
       "name": "cpu4",
       "usage": 0.0
     },
     {
-      "brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
-      "frequency": 2911,
+      "brand": "Cortex-A78AE",
+      "frequency": 729,
       "name": "cpu5",
-      "usage": 0.0
-    },
-    {
-      "brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
-      "frequency": 1274,
-      "name": "cpu6",
-      "usage": 0.0
-    },
-    {
-      "brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
-      "frequency": 1471,
-      "name": "cpu7",
-      "usage": 0.0
-    },
-    {
-      "brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
-      "frequency": 1580,
-      "name": "cpu8",
-      "usage": 0.0
-    },
-    {
-      "brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
-      "frequency": 1507,
-      "name": "cpu9",
-      "usage": 0.0
-    },
-    {
-      "brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
-      "frequency": 1396,
-      "name": "cpu10",
-      "usage": 0.0
-    },
-    {
-      "brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
-      "frequency": 1468,
-      "name": "cpu11",
-      "usage": 0.0
-    },
-    {
-      "brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
-      "frequency": 1426,
-      "name": "cpu12",
-      "usage": 0.0
-    },
-    {
-      "brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
-      "frequency": 1993,
-      "name": "cpu13",
-      "usage": 0.0
-    },
-    {
-      "brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
-      "frequency": 1321,
-      "name": "cpu14",
-      "usage": 0.0
-    },
-    {
-      "brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
-      "frequency": 2195,
-      "name": "cpu15",
       "usage": 0.0
     }
   ],
   "disks": [
     {
-      "available_space": 76941479936,
+      "available_space": 186810265600,
       "file_system": "ext4",
       "mount_point": "/",
-      "name": "/dev/nvme0n1p2",
-      "total_space": 1006450962432
+      "name": "/dev/mmcblk0p1",
+      "total_space": 250131267584
     },
     {
-      "available_space": 529432576,
+      "available_space": 65946624,
       "file_system": "vfat",
       "mount_point": "/boot/efi",
-      "name": "/dev/nvme0n1p1",
-      "total_space": 535805952
-    },
-    {
-      "available_space": 0,
-      "file_system": "fuse.cursor-0.45.14x86_64.AppImage",
-      "mount_point": "/tmp/.mount_cursorO4RPqC",
-      "name": "cursor-0.45.14x86_64.AppImage",
-      "total_space": 0
+      "name": "/dev/mmcblk0p10",
+      "total_space": 66059264
     }
   ],
-  "free_memory": 32135196672,
-  "global_cpu_usage": 5.2112675,
-  "host_name": "farmng-TensorBook-late-2021",
-  "kernel_version": "5.15.0-130-generic",
+  "free_memory": 4320612352,
+  "global_cpu_usage": 18.697363,
+  "host_name": "nvidia-desktop",
+  "kernel_version": "5.15.148-tegra",
   "name": "Ubuntu",
-  "os_version": "20.04",
-  "total_memory": 67230515200,
-  "total_swap": 2147479552,
-  "used_memory": 19678961664
+  "os_version": "22.04",
+  "total_memory": 7990116352,
+  "total_swap": 3995049984,
+  "used_memory": 978509824
 }
 ```
