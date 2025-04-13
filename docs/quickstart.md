@@ -1,5 +1,5 @@
 ---
-description: Get started with serving Bubbaloop platform
+description: Get started with serving Bubbaloop serving platform
 ---
 
 # 🚀 Quickstart

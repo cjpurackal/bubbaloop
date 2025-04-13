@@ -2,8 +2,8 @@
 
 * [🦄 Bubbaloop](README.md)
 * [🚀 Quickstart](quickstart.md)
-* [💊 Basic Usage](usage.md)
-* [🍰 Pipelines](pipelines.md)
+* [💊 Stats API](usage.md)
+* [🍰 Pipeline API](pipelines.md)
 
 ## Examples
 
@@ -12,4 +12,4 @@
 
 ***
 
-* [🍄 Model Inference](model-inference.md)
+* [🍄 Model Inference (experimental)](model-inference-experimental.md)

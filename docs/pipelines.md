@@ -1,8 +1,42 @@
-# 🍰 Pipelines
+---
+description: Basic usage and pipeline management with Bubbaloop
+---
 
-Bubbaloop can serve local pipeline orchestrated by copper-rs[^1] which are defined by ron[^2] files.
+# 🍰 Pipeline API
 
-## Start pipeline
+**Bubbaloop** is a Rust-based server application that orchestrates computational pipelines using the Cu29 ([copper-rs](https://github.com/copper-project/copper-rs)) framework. It provides both an HTTP API and CLI for managing these pipelines.
+
+## Core Concepts
+
+* Pipeline Management: The system dynamically manages multiple pipeline types (bubbaloop, inference, recording, streaming) that process data through connected tasks.
+* Cu29/Copper Framework: Pipelines are built using the Cu29 framework ([copper-rs](https://github.com/copper-project/copper-rs)), which provides a task-based computation model with message passing between components.
+* RON Configuration: Pipelines are defined in [RON](https://github.com/ron-rs/ron) (Rusty Object Notation) files that specify:
+  * Tasks: Individual processing components with unique IDs and configurations
+  * Connections: Message flows between tasks with specific message types
+
+## Architecture
+
+* API Server: An Axum-based HTTP server that exposes endpoints for pipeline management
+* Pipeline Store: Central registry tracking all running pipelines with their statuses
+* Result Store: Maintains processing results and enables streaming of data between components
+
+## Pipeline Types
+
+* `bubbaloop` — Our hello-world simple demo pipeline
+* `inference`  — Processes video streams for inference using computer vision models
+* `recording` — Captures and records video streams form single or multiple camera
+* `streaming` — Distributes video streams to clients
+* `custom` — (SOON) to implement custom pipelines
+
+## Available API
+
+* `POST /api/v0/pipeline/start` Start a pipeline with specified ID
+* `POST /api/v0/pipeline/stop` Stop a running pipeline
+* `GET /api/v0/pipeline/list` List all available pipelines with their statuses
+
+## Usage
+
+### Start pipeline
 
 Create and register a pipeline given its name. This will spawn a background task.
 
@@ -16,7 +50,7 @@ Result: {
 }
 ```
 
-## Stop pipeline
+### Stop pipeline
 
 To stop the pipeline, use the `stop-pipeline` command:
 
@@ -30,7 +64,7 @@ Result: {
 }
 ```
 
-## List pipelines
+### List pipelines
 
 To list all the registered pipelines and their status, use the `list-pipeline` command:
 
@@ -46,7 +80,3 @@ Result: [
   }
 ]
 ```
-
-[^1]: Visit the project: [https://github.com/copper-project/copper-rs](https://github.com/copper-project/copper-rs)
-
-[^2]: Rusty Object Notation [https://github.com/ron-rs/ron](https://github.com/ron-rs/ron)

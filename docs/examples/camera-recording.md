@@ -12,7 +12,7 @@ In order to customize the recording pipeline we need to follow the steps below, 
 
 {% stepper %}
 {% step %}
-### Update the pipeline in[ \`recording.rs\`](../../src/cu29/pipelines/recording.rs)
+### Update the pipeline in[ recording.rs](../../src/cu29/pipelines/recording.rs)
 
 Go to [`recording.rs`](../../src/cu29/pipelines/recording.rs) an update the `config` parameter by specifying the path to the pipeline `ron` file that you want to use for the recording task.
 
@@ -257,7 +257,7 @@ To stop the pipeline, use the `stop-pipeline` command:
 just stop-pipeline recording 0.0.0.0 3000
 ```
 
-**Client terminal**
+#### **Client terminal**
 
 ```
 Result: {
@@ -265,7 +265,7 @@ Result: {
 }
 ```
 
-**Server terminal**
+#### **Server terminal**
 
 ```bash
 [2025-04-13T12:10:45Z DEBUG bubbaloop::api::handles::pipeline] Request to stop pipeline: recording
@@ -273,7 +273,7 @@ Result: {
 [2025-04-13T12:10:45Z DEBUG re_log_encoding::file_sink] Log stream written to /tmp/1744545975.rrd
 ```
 
-## Get and Visualize the recorded data
+## Get the recorded data and Visualize
 
 You can copy to your home directory (or via ssh) the recorded files into your computer.
 

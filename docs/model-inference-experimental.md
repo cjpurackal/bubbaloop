@@ -2,9 +2,9 @@
 description: Example showing how to use the inference functionality
 ---
 
-# 🍄 Model Inference
+# 🍄 Model Inference (experimental)
 
-The Bubbaloop server is able to run **inference** efficiently Visual Language Models (VLM) using directly the camera streams without any latency in the same process and broadcast the results.
+The **Bubbaloop** server is able to run **inference** efficiently Visual Language Models (VLM) using directly the camera streams without any latency in the same process and broadcast the results.
 
 Supported models (via [Kornia](https://github.com/kornia/kornia-paligemma) / [Candle](https://github.com/huggingface/candle))
 
@@ -97,19 +97,19 @@ This will fix the prompt to run inference on to detect people
 
 You can access also to the image streams and prompts results via the following API including their timestamps.
 
-**Jpeg encoded images**
+#### **Jpeg encoded images**
 
 ```html
-http://localhost:3000/api/v0/inference/image
+http://localhost:3000/api/v0/streaming/image
 ```
 
-**Model inference results**
+#### **Model inference results**
 
 ```
 http://localhost:3000/api/v0/inference/results
 ```
 
-### Visualize streams
+#### Visualize streams with inference results
 
 We provide a small Python script that calls the above end points and visualize the results with [Rerun](https://rerun.io/)
 
@@ -117,9 +117,9 @@ We provide a small Python script that calls the above end points and visualize t
 [https://github.com/kornia/bubbaloop/blob/main/examples/python-inference/client.py](../examples/python-inference/client.py)
 {% endhint %}
 
-<figure><img src="https://github.com/kornia/data/blob/main/bubbaloop_inference.png?raw=true" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/kornia/data/blob/main/bubbaloop/bubbaloop_inference.png?raw=true" alt=""><figcaption></figcaption></figure>
 
-## Stop recording
+## Stop inference
 
 To stop the pipeline, use the `stop-pipeline` command:
 
