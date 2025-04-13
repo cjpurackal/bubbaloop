@@ -2,7 +2,7 @@
 
 * [🦄 Bubbaloop](README.md)
 * [🚀 Quickstart](quickstart.md)
-* [💊 Usage](usage.md)
+* [💊 Basic Usage](usage.md)
 * [🍰 Pipelines](pipelines.md)
 
 ## Examples

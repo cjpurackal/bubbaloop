@@ -2,15 +2,29 @@
 description: Low level utilies with the Bubbaloop server
 ---
 
-# 💊 Usage
+# 💊 Basic Usage
 
-### Request stats
+The Bubbaloop server is provided with a REST api that allows the user to query basic information about the system where is running on under the `/api/v0/stats` end point
+
+We expose the following utilities&#x20;
+
+* `whoami` [https://docs.rs/whoami/latest/whoami/](https://docs.rs/whoami/latest/whoami/)
+
+## whoami
 
 ```
 just whoami 0.0.0.0 3000
 ```
 
-```json
+**Server terminal**
+
+```bash
+[2025-04-13T12:34:53Z DEBUG bubbaloop::api::handles::stats] 🤖 Received request for whoami
+```
+
+**Client terminal**
+
+```bash
 Result: {
   "arch": "Arm64",
   "desktop_env": "Unknown",
@@ -22,19 +36,3 @@ Result: {
   "username": "nvidia"
 }
 ```
-
-### Compute mean and std of a local directory of images
-
-You can request to compute the mean and standard deviation over a dataset of images stored in the server.&#x20;
-
-{% hint style="info" %}
-Supports only `jpg | jpeg | png`  formats for now.
-{% endhint %}
-
-```
-just compute-mean-std 0.0.0.0 3000 /path/to/images
-```
-
-From server side you should see something like
-
-![compute\_mean\_std-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/22b35c6d-2a97-418c-a6f1-dbc131cf5bdb)
