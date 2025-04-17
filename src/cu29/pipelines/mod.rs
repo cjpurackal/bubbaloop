@@ -1,7 +1,6 @@
-mod inference;
-mod recording;
-mod streaming;
+mod cameras;
+pub use cameras::spawn_cameras_pipeline;
 
+// EXPERIMENTAL
+mod inference;
 pub use inference::spawn_inference_pipeline;
-pub use recording::spawn_recording_pipeline;
-pub use streaming::spawn_streaming_pipeline;
