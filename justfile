@@ -16,6 +16,14 @@ clippy:
 check:
     cargo check
 
+lint:
+    @echo "Running format..."
+    just format
+    @echo "Running clippy..."
+    just clippy
+    @echo "Running check..."
+    just check
+
 install_deps:
     ./scripts/install_deps.sh
 
@@ -31,11 +39,11 @@ whoami HOST="0.0.0.0" PORT="3000":
 sysinfo HOST="0.0.0.0" PORT="3000":
     RUST_LOG=info cargo run --release --bin bubbaloop -- -h {{HOST}} -p {{PORT}} stats sysinfo
 
-start-pipeline ID HOST="0.0.0.0" PORT="3000":
-    RUST_LOG=info cargo run --release --bin bubbaloop -- -h {{HOST}} -p {{PORT}} pipeline start -i {{ID}}
+start-pipeline NAME HOST="0.0.0.0" PORT="3000":
+    RUST_LOG=info cargo run --release --bin bubbaloop -- -h {{HOST}} -p {{PORT}} pipeline start -n {{NAME}}
 
-stop-pipeline ID HOST="0.0.0.0" PORT="3000":
-    RUST_LOG=info cargo run --release --bin bubbaloop -- -h {{HOST}} -p {{PORT}} pipeline stop -i {{ID}}
+stop-pipeline NAME HOST="0.0.0.0" PORT="3000":
+    RUST_LOG=info cargo run --release --bin bubbaloop -- -h {{HOST}} -p {{PORT}} pipeline stop -n {{NAME}}
 
 list-pipelines HOST="0.0.0.0" PORT="3000":
     RUST_LOG=info cargo run --release --bin bubbaloop -- -h {{HOST}} -p {{PORT}} pipeline list
