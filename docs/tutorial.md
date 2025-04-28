@@ -61,7 +61,26 @@ This guide walks you through setting up **Bubbaloop**, an open-source camera pip
 git clone https://github.com/kornia/bubbaloop.git
 cd bubbaloop
 ```
+## Configure Your Camera
 
+Edit `src/cu29/pipelines/cameras_1.ron`:
+```ron
+(
+    tasks: [
+        (
+            id: "cam0",
+            type: "crate::cu29::tasks::VideoCapture",
+            config: {
+                "source_type": "rtsp",
+                // URL of the RTSP camera
+                // rtsp://<username>:<password>@<ip>:<port>/<stream>
+                "source_uri": "rtsp://tapo_entrance:123456789@192.168.1.141:554/stream2",
+                "channel_id": 0,
+            }
+        ),
+    ],
+)
+```
 ### Install bubbaloop
 ```bash
 sudo ./scripts/install_linux.sh
@@ -70,6 +89,10 @@ This will install all the necessary dependencies including Rust (if not installe
 
 ```
 systemctl status bubbaloop
+```
+for real time logs
+```
+sudo journalctl -u bubbaloop.service -f
 ```
 
 
@@ -81,34 +104,26 @@ bubbaloop  pipeline start --name cameras
 
 To stop:
 ```bash
-just stop-pipeline recording 0.0.0.0 3000
+bubbaloop  pipeline stop --name cameras
 ```
 
 List all pipelines:
 ```bash
-just pipeline-list 0.0.0.0 3000
+bubbaloop pipeline list
 ```
 
 ---
 
-## Configure Your Camera
-
-Edit `src/cu29/pipelines/recording_one_camera.ron`:
-```ron
-(
-    tasks: [
-        (
-            id: "cam0",
-            type: "crate::cu29::tasks::VideoCapture",
-            config: {
-                "source_type": "rtsp",
-                "source_uri": "rtsp://192.168.1.141:8554/live",
-                "channel_id": 0,
-            }
-        ),
-    ],
-)
+## Start a recording
+```bash
+bubbaloop recording start
 ```
+To stop:
+```bash
+bubbaloop recording stop
+```
+
+
 
 ---
 
@@ -126,7 +141,7 @@ rerun 1735941642.rrd
 
 ---
 
-## Running Paligemma for Object Detection
+## Running Paligemma for Object Detection (Experimental)
 
 ```bash
 just start-pipeline paligemma 0.0.0.0 3000
@@ -161,6 +176,3 @@ Example config:
 ## Contribute / Feedback
 
 Join our [Discord server](https://discord.com/invite/HfnywwpBnD) or open issues on [GitHub](https://github.com/kornia/bubbaloop).
-
-💡 *Coming soon*: One-click Docker or VirtualBox setup for a safe, quick start.
-
