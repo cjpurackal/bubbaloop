@@ -64,7 +64,7 @@ cd bubbaloop
 
 ### Install bubbaloop
 ```bash
-./scripts/install_linux.sh
+sudo ./scripts/install_linux.sh
 ```
 This will install all the necessary dependencies including Rust(if not installed on your computer) and start the system process. You can check the status via
 
