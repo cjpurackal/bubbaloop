@@ -76,7 +76,7 @@ systemctl status bubbaloop
 ## Start a Camera Pipeline
 
 ```bash
-just start-pipeline recording 0.0.0.0 3000
+bubbaloop  pipeline start --name cameras
 ```
 
 To stop:
