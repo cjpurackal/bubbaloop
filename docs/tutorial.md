@@ -144,7 +144,7 @@ rerun 1735941642.rrd
 ## Running Paligemma for Object Detection (Experimental)
 
 ```bash
-just start-pipeline paligemma 0.0.0.0 3000
+just start-pipeline inference 0.0.0.0 3000
 ```
 
 Example config:
